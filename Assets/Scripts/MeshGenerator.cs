@@ -6,6 +6,7 @@ public static class MeshGenerator
 {
     public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve meshHeightCurve, int levelOfDetail)
     {
+        AnimationCurve multiThreadHeightCurve = new AnimationCurve(meshHeightCurve.keys);
         int width = heightMap.GetLength(0);
         int height = heightMap.GetLength(1);
         float topLeftX = (width-1)/-2f;
@@ -21,7 +22,7 @@ public static class MeshGenerator
         {
             for (int x = 0; x < width; x += mapRenderInteractions)
             {
-                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, meshHeightCurve.Evaluate(heightMap[x,z]) * heightMultiplier, topLeftZ - z);
+                meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, multiThreadHeightCurve.Evaluate(heightMap[x,z]) * heightMultiplier, topLeftZ - z);
                 meshData.uvs[vertexIndex] = new Vector2(x/(float)width, z/(float)height);
 
                 if(x < width-1 && z < height-1)

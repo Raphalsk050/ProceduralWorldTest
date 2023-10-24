@@ -88,7 +88,7 @@ public class TerrainChunk{
 
     private void OnMapDataReceived(MapData mapData)
     {
-        MapGenerator.RequestMeshData(mapData, OnMeshDataReceived);
+        EndlessTerrain._mapGenerator.RequestMeshData(mapData, OnMeshDataReceived);
     }
 
     private void OnMeshDataReceived(MeshData meshData)
@@ -108,4 +108,25 @@ public class TerrainChunk{
     public bool IsVisible(){
         return _meshObject.activeSelf;
     }
+    
+    public class LODMesh
+    {
+        public Mesh mesh;
+        public bool hasRequestedMesh;
+        public bool hasMesh;
+        private int _lod;
+
+        public LODMesh(int lod)
+        {
+            _lod = lod;
+        }
+        
+
+        public void RequestMesh(MapData mapData)
+        {
+            hasRequestedMesh = true;
+            EndlessTerrain._mapGenerator.RequestMeshData(mapData,);
+        }
+    }
 }
+
