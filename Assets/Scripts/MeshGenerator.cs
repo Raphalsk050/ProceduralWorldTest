@@ -11,20 +11,23 @@ public static class MeshGenerator
         float topLeftX = (width-1)/-2f;
         float topLeftZ = (height-1)/2f;
 
-        MeshData meshData = new MeshData(width, height);
+        int mapRenderInteractions = (levelOfDetail <= 0) ? 1 : levelOfDetail * 2;
+        int verticesPerLine = (width-1)/mapRenderInteractions + 1;
+
+        MeshData meshData = new MeshData(verticesPerLine, verticesPerLine);
         int vertexIndex = 0;
         
-        for (int z = 0; z < height; z++)
+        for (int z = 0; z < height; z += mapRenderInteractions)
         {
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < width; x += mapRenderInteractions)
             {
                 meshData.vertices[vertexIndex] = new Vector3(topLeftX + x, meshHeightCurve.Evaluate(heightMap[x,z]) * heightMultiplier, topLeftZ - z);
                 meshData.uvs[vertexIndex] = new Vector2(x/(float)width, z/(float)height);
 
                 if(x < width-1 && z < height-1)
                 {
-                    meshData.AddTriangle(vertexIndex, vertexIndex+width+1, vertexIndex+width);
-                    meshData.AddTriangle(vertexIndex+width+1, vertexIndex, vertexIndex+1);
+                    meshData.AddTriangle(vertexIndex, vertexIndex+verticesPerLine+1, vertexIndex+verticesPerLine);
+                    meshData.AddTriangle(vertexIndex+verticesPerLine+1, vertexIndex, vertexIndex+1);
                 }
 
                 vertexIndex++;
